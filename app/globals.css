@@ -1,0 +1,843 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   ӨНГӨНИЙ СИСТЕМ — brand tokens (pitch deck palette)
+   Dark theme = default. [data-theme="light"] overrides.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* brand */
+  --teal: #14c79f; /* primary action */
+  --teal-ink: #04231d;
+  --indigo: #4f6bff; /* secondary */
+  --violet: #8b5cf6;
+  --amber: #f0a020;
+  --rose: #f2657c;
+
+  /* surfaces — dark (default) */
+  --bg: #080e1a;
+  --surface: #0f1a2c;
+  --surface-2: #15233a;
+  --raise: #1a2a44;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-2: rgba(255, 255, 255, 0.16);
+  --txt: #e8eff7;
+  --txt-2: #93a7bd;
+  --txt-3: #6c819a;
+  --pill: rgba(20, 199, 159, 0.13);
+  --glow: 0 26px 60px -30px rgba(0, 0, 0, 0.9);
+  --glow-lg: 0 40px 90px -36px rgba(0, 0, 0, 0.95);
+  --band: linear-gradient(128deg, #0c7a67 0%, #2f45ce 48%, #5b2fc7 100%);
+  --grad-txt: #bfe9de;
+  --card-grad: linear-gradient(165deg, #16243c, #0e1929);
+  --card-grad-strong: linear-gradient(165deg, #182742, #0e1929);
+  --cell-tint: rgba(255, 255, 255, 0.035);
+  --input-bg: rgba(0, 0, 0, 0.28);
+
+  --r: 16px;
+  --r-lg: 24px;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f7f9fc;
+  --surface-2: #ffffff;
+  --raise: #ffffff;
+  --line: #e7eaf2;
+  --line-2: #d3d9e6;
+  --txt: #101a2b;
+  --txt-2: #5f6c82;
+  --txt-3: #8a95a8;
+  --pill: rgba(14, 144, 120, 0.1);
+  --teal: #0e9078;
+  --teal-ink: #ffffff;
+  --glow: 0 18px 40px -24px rgba(20, 35, 70, 0.22);
+  --glow-lg: 0 34px 70px -32px rgba(20, 35, 70, 0.28);
+  --band: linear-gradient(128deg, #0e9b84 0%, #3b5bff 48%, #7c4df7 100%);
+  --grad-txt: #d9f2ea;
+  --card-grad: var(--surface-2);
+  --card-grad-strong: var(--surface-2);
+  --cell-tint: transparent;
+  --input-bg: var(--bg);
+}
+
+/* Bridge brand tokens into Tailwind's utility generator so classes like
+   bg-teal / text-txt-2 / border-line resolve to the live CSS variables
+   above (and therefore react to the [data-theme] switch automatically). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-raise: var(--raise);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-txt: var(--txt);
+  --color-txt-2: var(--txt-2);
+  --color-txt-3: var(--txt-3);
+  --color-pill: var(--pill);
+
+  --color-teal: var(--teal);
+  --color-teal-ink: var(--teal-ink);
+  --color-indigo: var(--indigo);
+  --color-violet: var(--violet);
+  --color-amber: var(--amber);
+  --color-rose: var(--rose);
+
+  /* names come from next/font (see app/layout.tsx); system-ui/sans-serif
+     fallbacks cover the (practically impossible) case a font fails to load
+     before next/font's own metric-matched fallback kicks in */
+  --font-display: var(--font-unbounded, "Unbounded"), system-ui, sans-serif;
+  --font-body: var(--font-onest, "Onest"), system-ui, sans-serif;
+  --font-mono-brand: var(--font-jbmono, "JetBrains Mono"), ui-monospace, monospace;
+}
+
+/* Explicitly in Tailwind's `base` layer (rather than left unlayered) so
+   that later `@layer components` rules — e.g. `.c-btn--white` setting its
+   own text color — can win the cascade purely on layer order. Unlayered
+   CSS always beats every `@layer`, regardless of specificity, so leaving
+   these bare would silently make `a { color: inherit }` unbeatable. */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--txt);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+  a {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  section[id] {
+    scroll-margin-top: 84px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BEMish component layer — bespoke visual patterns that are
+   awkward to express as one-off Tailwind utility soup. Layout,
+   spacing and type still live in the JSX as Tailwind classes;
+   this layer only owns brand-specific chrome.
+   ═══════════════════════════════════════════════════════════ */
+@layer components {
+  /* page container + section rhythm, used by virtually every section */
+  .wrap {
+    max-width: 1160px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+  .sec {
+    padding: clamp(66px, 8vw, 116px) 0;
+  }
+  .bg-s {
+    background: var(--surface);
+  }
+
+  /* decorative corner arcs (pitch-deck motif) */
+  .c-arc {
+    position: absolute;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 1.5px;
+  }
+  .c-arc--tr {
+    top: -90px;
+    right: -70px;
+    width: 330px;
+    height: 330px;
+    border-color: var(--indigo);
+    border-radius: 0 0 0 100%;
+    opacity: 0.6;
+  }
+  .c-arc--bl {
+    bottom: -90px;
+    left: -60px;
+    width: 260px;
+    height: 260px;
+    border-color: var(--teal);
+    border-radius: 0 100% 0 0;
+    opacity: 0.45;
+  }
+
+  /* elevated surface card used by schedule / kpi / staggered mocks */
+  .c-card {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--glow);
+  }
+  [data-theme="dark"] .c-card {
+    background: var(--card-grad);
+  }
+  .c-card--lg {
+    box-shadow: var(--glow-lg);
+  }
+  .c-cell {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  [data-theme="dark"] .c-cell {
+    background: var(--cell-tint);
+  }
+
+  /* eyebrow label */
+  .c-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono-brand);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: var(--pill);
+    padding: 6px 13px;
+    border-radius: 99px;
+    margin: 0 0 18px;
+  }
+
+  /* emphasis inside headings, e.g. <em>нэг системд</em> */
+  .c-em {
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  /* buttons */
+  .c-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 28px;
+    border-radius: 99px;
+    border: 1.5px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.15s,
+      box-shadow 0.2s,
+      background 0.18s,
+      border-color 0.18s;
+  }
+  .c-btn:hover {
+    transform: translateY(-2px);
+  }
+  .c-btn--pri {
+    background: var(--teal);
+    color: var(--teal-ink);
+    font-weight: 600;
+    box-shadow: 0 14px 30px -14px rgba(20, 199, 159, 0.6);
+  }
+  .c-btn--pri:hover {
+    box-shadow: 0 20px 40px -16px rgba(20, 199, 159, 0.75);
+  }
+  .c-btn--sec {
+    background: var(--surface-2);
+    color: var(--txt);
+    border-color: var(--line-2);
+  }
+  .c-btn--sec:hover {
+    border-color: var(--teal);
+  }
+  .c-btn--white {
+    background: #fff;
+    color: #0c3a31;
+    font-weight: 600;
+  }
+  .c-btn--sm {
+    padding: 11px 20px;
+    font-size: 14.5px;
+  }
+
+  /* nav */
+  .c-nav {
+    position: sticky;
+    top: 0;
+    z-index: 70;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  .c-brand span {
+    color: var(--teal);
+  }
+  .c-nav-link {
+    color: var(--txt-2);
+    text-decoration: none;
+  }
+  .c-nav-link:hover {
+    color: var(--teal);
+  }
+  .c-theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 99px;
+    border: 1px solid var(--line-2);
+    background: var(--surface-2);
+    color: var(--txt);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.18s;
+  }
+  .c-theme-toggle:hover {
+    border-color: var(--teal);
+  }
+  [data-theme="dark"] .c-theme-toggle__icon--sun {
+    display: block;
+  }
+  [data-theme="dark"] .c-theme-toggle__icon--moon {
+    display: none;
+  }
+  [data-theme="light"] .c-theme-toggle__icon--sun {
+    display: none;
+  }
+  [data-theme="light"] .c-theme-toggle__icon--moon {
+    display: block;
+  }
+
+  /* hero glows + mesh */
+  .c-hero-glow {
+    position: absolute;
+    top: -180px;
+    right: -140px;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at 40% 40%,
+      rgba(20, 199, 159, 0.16),
+      rgba(79, 107, 255, 0.13) 42%,
+      transparent 68%
+    );
+  }
+  .c-hero-glow2 {
+    position: absolute;
+    bottom: -260px;
+    left: -180px;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.13), transparent 66%);
+  }
+  .c-hero-mesh {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background:
+      repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 92px),
+      repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 76px);
+    mask-image: radial-gradient(ellipse 78% 66% at 62% 32%, #000 22%, transparent 100%);
+  }
+
+  /* schedule grid (signature hero visual) */
+  .c-tt {
+    display: grid;
+    grid-template-columns: 42px repeat(5, 1fr);
+    gap: 5px;
+  }
+  .c-tt__d,
+  .c-tt__t {
+    font-family: var(--font-mono-brand);
+    font-size: 10px;
+    color: var(--txt-3);
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+  }
+  .c-tt__d {
+    justify-content: center;
+    padding-bottom: 4px;
+  }
+  .c-tt__c {
+    min-height: 42px;
+    border-radius: 9px;
+    background: var(--surface);
+    border: 1px solid transparent;
+    font-size: 10.5px;
+    line-height: 1.25;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4px;
+    color: var(--txt-2);
+  }
+  [data-theme="dark"] .c-tt__c {
+    background: var(--cell-tint);
+  }
+  .c-k-t {
+    background: rgba(20, 199, 159, 0.16);
+    border-color: rgba(20, 199, 159, 0.4);
+    color: #6fe3c7;
+  }
+  .c-k-i {
+    background: rgba(79, 107, 255, 0.16);
+    border-color: rgba(79, 107, 255, 0.42);
+    color: #a3b4ff;
+  }
+  .c-k-v {
+    background: rgba(139, 92, 246, 0.16);
+    border-color: rgba(139, 92, 246, 0.42);
+    color: #c4aeff;
+  }
+  .c-k-x {
+    background: rgba(242, 101, 124, 0.15);
+    border-color: rgba(242, 101, 124, 0.55);
+    color: #ffa7b5;
+    animation: c-pulse 2.4s ease-in-out infinite;
+  }
+  [data-theme="light"] .c-k-t {
+    color: #0a6e5b;
+  }
+  [data-theme="light"] .c-k-i {
+    color: #2b41c4;
+  }
+  [data-theme="light"] .c-k-v {
+    color: #5b32c9;
+  }
+  [data-theme="light"] .c-k-x {
+    color: #c22e4a;
+  }
+  @keyframes c-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(242, 101, 124, 0.32);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(242, 101, 124, 0);
+    }
+  }
+
+  /* floating conflict-alert chip */
+  .c-chip {
+    position: absolute;
+    right: -16px;
+    bottom: 64px;
+    max-width: 248px;
+    background: var(--raise);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    padding: 13px 15px;
+    box-shadow: var(--glow-lg);
+    animation: c-chip-in 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) 1s both;
+  }
+  .c-chip__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 99px;
+    background: var(--rose);
+    flex: none;
+  }
+  @keyframes c-chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (max-width: 980px) {
+    .c-chip {
+      position: static;
+      max-width: none;
+      margin-top: 14px;
+    }
+  }
+
+  /* logo strip slots */
+  .c-slot {
+    border: 1.5px dashed var(--line-2);
+    border-radius: 12px;
+    padding: 12px 26px;
+    color: var(--txt-3);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* problem icon tiles */
+  .c-igrid-icon {
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ticks list (checkmark bullets) */
+  .c-ticks li {
+    position: relative;
+    padding: 6px 0 6px 28px;
+    font-size: 15.5px;
+  }
+  .c-ticks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 15px;
+    height: 15px;
+    border-radius: 99px;
+    background: var(--pill);
+    box-shadow: inset 0 0 0 4.5px var(--teal);
+  }
+
+  /* mock dashboard bars */
+  .c-bars i {
+    flex: 1;
+    border-radius: 6px 6px 3px 3px;
+    display: block;
+    background: var(--teal);
+  }
+  .c-bars i:nth-child(2) {
+    background: var(--indigo);
+  }
+  .c-bars i:nth-child(4) {
+    background: var(--violet);
+  }
+  .c-bars i:nth-child(6) {
+    background: var(--teal);
+  }
+
+  /* day timeline */
+  .c-day {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+  }
+  @media (max-width: 640px) {
+    .c-day {
+      grid-template-columns: 62px 1fr;
+    }
+  }
+  .c-day__t {
+    font-family: var(--font-mono-brand);
+    font-size: 14.5px;
+    color: var(--teal);
+    padding: 24px 0;
+    border-right: 1.5px solid var(--line-2);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .c-day__t::after {
+    content: "";
+    position: absolute;
+    right: -5.5px;
+    top: 31px;
+    width: 10px;
+    height: 10px;
+    border-radius: 99px;
+    background: var(--teal);
+    box-shadow:
+      0 0 0 4px var(--surface),
+      0 0 14px rgba(20, 199, 159, 0.7);
+  }
+  .c-day__c {
+    padding: 24px 0 24px 28px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* staggered module cards */
+  .c-scard {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--glow);
+    transition:
+      transform 0.2s,
+      border-color 0.2s;
+  }
+  [data-theme="dark"] .c-scard {
+    background: var(--card-grad);
+  }
+  .c-scard:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-2);
+  }
+  .c-scard:nth-child(even) {
+    transform: translateY(26px);
+  }
+  .c-scard:nth-child(even):hover {
+    transform: translateY(22px);
+  }
+  @media (max-width: 640px) {
+    .c-scard:nth-child(even),
+    .c-scard:nth-child(even):hover {
+      transform: none;
+    }
+  }
+
+  /* gradient promo band, reused by CTA + FAQ */
+  .c-band {
+    background: var(--band);
+    border-radius: 28px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .c-band--br::after {
+    content: "";
+    position: absolute;
+    right: -90px;
+    bottom: -140px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+  }
+  .c-band--br::before {
+    content: "";
+    position: absolute;
+    right: -30px;
+    bottom: -90px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+  .c-band--tl::after {
+    content: "";
+    position: absolute;
+    left: -70px;
+    top: -70px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* user-type avatar pills */
+  .c-av {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 8px 20px 8px 8px;
+    box-shadow: var(--glow);
+  }
+  .c-av__i {
+    width: 36px;
+    height: 36px;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    font-style: normal;
+    color: #08131f;
+    flex: none;
+  }
+
+  /* before / after rows */
+  .c-ba__r {
+    display: grid;
+    grid-template-columns: 1fr 50px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .c-ba__o {
+    color: var(--txt-3);
+    font-size: 15.5px;
+    text-decoration: line-through;
+    text-decoration-color: var(--line-2);
+  }
+  @media (max-width: 600px) {
+    .c-ba__r {
+      grid-template-columns: 1fr;
+      gap: 3px;
+      padding: 13px 0;
+    }
+  }
+
+  /* pricing */
+  .c-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border: 1px solid var(--line-2);
+    border-radius: 99px;
+    padding: 4px;
+    margin-top: 24px;
+  }
+  .c-toggle button {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 500;
+    border: 0;
+    background: none;
+    padding: 10px 22px;
+    border-radius: 99px;
+    cursor: pointer;
+    color: var(--txt-2);
+  }
+  .c-toggle button[aria-pressed="true"] {
+    background: var(--teal);
+    color: var(--teal-ink);
+    font-weight: 600;
+  }
+  .c-plan {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--glow);
+    position: relative;
+  }
+  [data-theme="dark"] .c-plan {
+    background: var(--card-grad);
+  }
+  .c-plan--best {
+    border: 1.5px solid var(--teal);
+    box-shadow:
+      0 0 0 4px rgba(20, 199, 159, 0.1),
+      var(--glow-lg);
+  }
+  .c-plan__flag {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--teal);
+    color: var(--teal-ink);
+    font-family: var(--font-mono-brand);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .c-plan__list li {
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .c-plan__list li:last-child {
+    border: 0;
+  }
+
+  /* FAQ accordion inside the gradient band */
+  .c-faq-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .c-faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 19px 44px 19px 0;
+    font-size: 16.5px;
+    font-weight: 500;
+    position: relative;
+  }
+  .c-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .c-faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 6px;
+    top: 16px;
+    font-family: var(--font-mono-brand);
+    font-size: 21px;
+    color: var(--grad-txt);
+  }
+  .c-faq-item[open] summary::after {
+    content: "\2013";
+  }
+
+  /* CTA card (overlaps the FAQ band above it) */
+  .c-cta-card {
+    background: var(--surface-2);
+    border: 1px solid var(--line-2);
+    border-radius: 28px;
+    box-shadow: var(--glow-lg);
+  }
+  [data-theme="dark"] .c-cta-card {
+    background: var(--card-grad-strong);
+  }
+
+  /* contact form */
+  .c-field label {
+    display: block;
+    font-family: var(--font-mono-brand);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--txt-3);
+    margin: 0 0 6px;
+  }
+  .c-field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    color: var(--txt);
+  }
+  [data-theme="dark"] .c-field input {
+    background: var(--input-bg);
+  }
+  .c-field input::placeholder {
+    color: var(--txt-3);
+  }
+  .c-field input:focus {
+    border-color: var(--teal);
+    outline: none;
+  }
+
+  /* scroll reveal */
+  .c-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .c-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+  .c-reveal {
+    opacity: 1;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
