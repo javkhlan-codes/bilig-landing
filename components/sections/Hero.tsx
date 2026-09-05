@@ -7,7 +7,10 @@ import { ScheduleCard } from "./hero/ScheduleCard";
 
 export function Hero() {
   return (
-    <header className="hero relative overflow-hidden bg-bg pb-[clamp(66px,7vw,100px)] pt-[clamp(50px,6vw,84px)]" id="top">
+    <header
+      className="hero relative overflow-hidden bg-bg pb-[clamp(66px,7vw,100px)] pt-[clamp(50px,6vw,84px)] xl:flex xl:min-h-[calc(100vh-70px)] xl:flex-col xl:justify-center"
+      id="top"
+    >
       <div className="c-hero-mesh" aria-hidden="true" />
       <div className="c-hero-glow" aria-hidden="true" />
       <div className="c-hero-glow2" aria-hidden="true" />
