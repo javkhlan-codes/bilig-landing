@@ -56,7 +56,7 @@ initial value is stamped before hydration by an inline script in
 `app/layout.tsx` (no flash of the wrong theme); `ThemeToggle` flips the
 attribute and persists the choice to `localStorage`.
 
-Tailwind utilities like `bg-teal`, `text-txt-2`, `border-line` resolve to
+Tailwind utilities like `bg-blue`, `text-txt-2`, `border-line` resolve to
 these variables via `@theme inline`, so they react to the theme switch
 automatically. Bespoke, brand-specific chrome that doesn't fit Tailwind's
 utility model (decorative arcs, the gradient promo band, the schedule grid,

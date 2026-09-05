@@ -5,13 +5,17 @@
    Dark theme = default. [data-theme="light"] overrides.
    ═══════════════════════════════════════════════════════════ */
 :root {
-  /* brand */
-  --teal: #14c79f; /* primary action */
-  --teal-ink: #04231d;
-  --indigo: #4f6bff; /* secondary */
-  --violet: #8b5cf6;
-  --amber: #f0a020;
-  --rose: #f2657c;
+  /* brand — BILIG kit. Solid, mid-saturated colors read fine on both a
+     near-black and a near-white surface, so unlike the old placeholder
+     palette these don't need a separate light-theme value. */
+  --blue: #2563eb; /* primary */
+  --blue-deep: #1529ac; /* dark stop of the Blue brand gradient */
+  --purple: #814df8; /* secondary */
+  --purple-light: #ee82ee; /* light stop of the Purple brand gradient */
+  --orange: #ff7715; /* accent */
+  --orange-light: #ffb135; /* light stop of the Orange brand gradient */
+  --brand-ink: #ffffff; /* text on a solid brand-colored fill */
+  --danger: #f2657c; /* semantic alert (schedule conflicts, overdue payments) — not a brand color, kept distinct so those states stay legible against blue/purple/orange */
 
   /* surfaces — dark (default) */
   --bg: #080e1a;
@@ -23,11 +27,11 @@
   --txt: #e8eff7;
   --txt-2: #93a7bd;
   --txt-3: #6c819a;
-  --pill: rgba(20, 199, 159, 0.13);
+  --pill: rgba(37, 99, 235, 0.14);
   --glow: 0 26px 60px -30px rgba(0, 0, 0, 0.9);
   --glow-lg: 0 40px 90px -36px rgba(0, 0, 0, 0.95);
-  --band: linear-gradient(128deg, #0c7a67 0%, #2f45ce 48%, #5b2fc7 100%);
-  --grad-txt: #bfe9de;
+  --band: linear-gradient(128deg, #2563eb 0%, #814df8 55%, #ff7715 100%);
+  --grad-txt: #ffe8d2;
   --card-grad: linear-gradient(165deg, #16243c, #0e1929);
   --card-grad-strong: linear-gradient(165deg, #182742, #0e1929);
   --cell-tint: rgba(255, 255, 255, 0.035);
@@ -47,13 +51,9 @@
   --txt: #101a2b;
   --txt-2: #5f6c82;
   --txt-3: #8a95a8;
-  --pill: rgba(14, 144, 120, 0.1);
-  --teal: #0e9078;
-  --teal-ink: #ffffff;
+  --pill: rgba(37, 99, 235, 0.1);
   --glow: 0 18px 40px -24px rgba(20, 35, 70, 0.22);
   --glow-lg: 0 34px 70px -32px rgba(20, 35, 70, 0.28);
-  --band: linear-gradient(128deg, #0e9b84 0%, #3b5bff 48%, #7c4df7 100%);
-  --grad-txt: #d9f2ea;
   --card-grad: var(--surface-2);
   --card-grad-strong: var(--surface-2);
   --cell-tint: transparent;
@@ -61,7 +61,7 @@
 }
 
 /* Bridge brand tokens into Tailwind's utility generator so classes like
-   bg-teal / text-txt-2 / border-line resolve to the live CSS variables
+   bg-blue / text-txt-2 / border-line resolve to the live CSS variables
    above (and therefore react to the [data-theme] switch automatically). */
 @theme inline {
   --color-bg: var(--bg);
@@ -75,12 +75,11 @@
   --color-txt-3: var(--txt-3);
   --color-pill: var(--pill);
 
-  --color-teal: var(--teal);
-  --color-teal-ink: var(--teal-ink);
-  --color-indigo: var(--indigo);
-  --color-violet: var(--violet);
-  --color-amber: var(--amber);
-  --color-rose: var(--rose);
+  --color-blue: var(--blue);
+  --color-purple: var(--purple);
+  --color-orange: var(--orange);
+  --color-brand-ink: var(--brand-ink);
+  --color-danger: var(--danger);
 
   /* names come from next/font (see app/layout.tsx); system-ui/sans-serif
      fallbacks cover the (practically impossible) case a font fails to load
@@ -118,7 +117,7 @@
     color: inherit;
   }
   :focus-visible {
-    outline: 2.5px solid var(--teal);
+    outline: 2.5px solid var(--blue);
     outline-offset: 3px;
     border-radius: 6px;
   }
@@ -159,7 +158,7 @@
     right: -70px;
     width: 330px;
     height: 330px;
-    border-color: var(--indigo);
+    border-color: var(--purple);
     border-radius: 0 0 0 100%;
     opacity: 0.6;
   }
@@ -168,7 +167,7 @@
     left: -60px;
     width: 260px;
     height: 260px;
-    border-color: var(--teal);
+    border-color: var(--blue);
     border-radius: 0 100% 0 0;
     opacity: 0.45;
   }
@@ -203,7 +202,7 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--teal);
+    color: var(--blue);
     background: var(--pill);
     padding: 6px 13px;
     border-radius: 99px;
@@ -213,7 +212,7 @@
   /* emphasis inside headings, e.g. <em>нэг системд</em> */
   .c-em {
     font-style: normal;
-    color: var(--teal);
+    color: var(--blue);
   }
 
   /* buttons */
@@ -240,13 +239,13 @@
     transform: translateY(-2px);
   }
   .c-btn--pri {
-    background: var(--teal);
-    color: var(--teal-ink);
+    background: var(--blue);
+    color: var(--brand-ink);
     font-weight: 600;
-    box-shadow: 0 14px 30px -14px rgba(20, 199, 159, 0.6);
+    box-shadow: 0 14px 30px -14px rgba(37, 99, 235, 0.6);
   }
   .c-btn--pri:hover {
-    box-shadow: 0 20px 40px -16px rgba(20, 199, 159, 0.75);
+    box-shadow: 0 20px 40px -16px rgba(37, 99, 235, 0.75);
   }
   .c-btn--sec {
     background: var(--surface-2);
@@ -254,11 +253,11 @@
     border-color: var(--line-2);
   }
   .c-btn--sec:hover {
-    border-color: var(--teal);
+    border-color: var(--blue);
   }
   .c-btn--white {
     background: #fff;
-    color: #0c3a31;
+    color: var(--blue-deep);
     font-weight: 600;
   }
   .c-btn--sm {
@@ -275,15 +274,12 @@
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
   }
-  .c-brand span {
-    color: var(--teal);
-  }
   .c-nav-link {
     color: var(--txt-2);
     text-decoration: none;
   }
   .c-nav-link:hover {
-    color: var(--teal);
+    color: var(--blue);
   }
   .c-theme-toggle {
     width: 38px;
@@ -299,7 +295,7 @@
     transition: border-color 0.18s;
   }
   .c-theme-toggle:hover {
-    border-color: var(--teal);
+    border-color: var(--blue);
   }
   [data-theme="dark"] .c-theme-toggle__icon--sun {
     display: block;
@@ -325,8 +321,8 @@
     pointer-events: none;
     background: radial-gradient(
       circle at 40% 40%,
-      rgba(20, 199, 159, 0.16),
-      rgba(79, 107, 255, 0.13) 42%,
+      rgba(37, 99, 235, 0.16),
+      rgba(129, 77, 248, 0.13) 42%,
       transparent 68%
     );
   }
@@ -338,7 +334,7 @@
     height: 520px;
     border-radius: 50%;
     pointer-events: none;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.13), transparent 66%);
+    background: radial-gradient(circle, rgba(255, 119, 21, 0.13), transparent 66%);
   }
   .c-hero-mesh {
     position: absolute;
@@ -389,19 +385,19 @@
     background: var(--cell-tint);
   }
   .c-k-t {
-    background: rgba(20, 199, 159, 0.16);
-    border-color: rgba(20, 199, 159, 0.4);
-    color: #6fe3c7;
+    background: rgba(37, 99, 235, 0.16);
+    border-color: rgba(37, 99, 235, 0.4);
+    color: #9cbcff;
   }
   .c-k-i {
-    background: rgba(79, 107, 255, 0.16);
-    border-color: rgba(79, 107, 255, 0.42);
-    color: #a3b4ff;
+    background: rgba(129, 77, 248, 0.16);
+    border-color: rgba(129, 77, 248, 0.42);
+    color: #cdb0ff;
   }
   .c-k-v {
-    background: rgba(139, 92, 246, 0.16);
-    border-color: rgba(139, 92, 246, 0.42);
-    color: #c4aeff;
+    background: rgba(255, 119, 21, 0.16);
+    border-color: rgba(255, 119, 21, 0.42);
+    color: #ffc08a;
   }
   .c-k-x {
     background: rgba(242, 101, 124, 0.15);
@@ -410,13 +406,13 @@
     animation: c-pulse 2.4s ease-in-out infinite;
   }
   [data-theme="light"] .c-k-t {
-    color: #0a6e5b;
+    color: #1d4fd1;
   }
   [data-theme="light"] .c-k-i {
-    color: #2b41c4;
+    color: #6b2fd6;
   }
   [data-theme="light"] .c-k-v {
-    color: #5b32c9;
+    color: #b8500a;
   }
   [data-theme="light"] .c-k-x {
     color: #c22e4a;
@@ -448,7 +444,7 @@
     width: 7px;
     height: 7px;
     border-radius: 99px;
-    background: var(--rose);
+    background: var(--danger);
     flex: none;
   }
   @keyframes c-chip-in {
@@ -501,7 +497,7 @@
     height: 15px;
     border-radius: 99px;
     background: var(--pill);
-    box-shadow: inset 0 0 0 4.5px var(--teal);
+    box-shadow: inset 0 0 0 4.5px var(--blue);
   }
 
   /* mock dashboard bars */
@@ -509,16 +505,16 @@
     flex: 1;
     border-radius: 6px 6px 3px 3px;
     display: block;
-    background: var(--teal);
+    background: var(--blue);
   }
   .c-bars i:nth-child(2) {
-    background: var(--indigo);
+    background: var(--purple);
   }
   .c-bars i:nth-child(4) {
-    background: var(--violet);
+    background: var(--orange);
   }
   .c-bars i:nth-child(6) {
-    background: var(--teal);
+    background: var(--blue);
   }
 
   /* day timeline */
@@ -534,7 +530,7 @@
   .c-day__t {
     font-family: var(--font-mono-brand);
     font-size: 14.5px;
-    color: var(--teal);
+    color: var(--blue);
     padding: 24px 0;
     border-right: 1.5px solid var(--line-2);
     border-bottom: 1px solid var(--line);
@@ -548,10 +544,10 @@
     width: 10px;
     height: 10px;
     border-radius: 99px;
-    background: var(--teal);
+    background: var(--blue);
     box-shadow:
       0 0 0 4px var(--surface),
-      0 0 14px rgba(20, 199, 159, 0.7);
+      0 0 14px rgba(37, 99, 235, 0.7);
   }
   .c-day__c {
     padding: 24px 0 24px 28px;
@@ -649,7 +645,7 @@
     font-size: 13px;
     font-weight: 600;
     font-style: normal;
-    color: #08131f;
+    color: var(--brand-ink);
     flex: none;
   }
 
@@ -697,8 +693,8 @@
     color: var(--txt-2);
   }
   .c-toggle button[aria-pressed="true"] {
-    background: var(--teal);
-    color: var(--teal-ink);
+    background: var(--blue);
+    color: var(--brand-ink);
     font-weight: 600;
   }
   .c-plan {
@@ -712,17 +708,17 @@
     background: var(--card-grad);
   }
   .c-plan--best {
-    border: 1.5px solid var(--teal);
+    border: 1.5px solid var(--blue);
     box-shadow:
-      0 0 0 4px rgba(20, 199, 159, 0.1),
+      0 0 0 4px rgba(37, 99, 235, 0.1),
       var(--glow-lg);
   }
   .c-plan__flag {
     position: absolute;
     top: -12px;
     left: 24px;
-    background: var(--teal);
-    color: var(--teal-ink);
+    background: var(--blue);
+    color: var(--brand-ink);
     font-family: var(--font-mono-brand);
     font-size: 10.5px;
     letter-spacing: 0.1em;
@@ -808,7 +804,7 @@
     color: var(--txt-3);
   }
   .c-field input:focus {
-    border-color: var(--teal);
+    border-color: var(--blue);
     outline: none;
   }
 

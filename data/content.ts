@@ -15,9 +15,9 @@ export const hero = {
   titleLines: ["Сургалтын системийг", "нэг дороос удирд."],
   sub: "BILIG ажлыг хялбарчилж, боловсролыг ойртуулна.",
   stats: [
-    { value: "1 өдөр", label: "нэвтрүүлэлтийн хугацаа", color: "teal" as const },
-    { value: "6 модуль", label: "нэг өгөгдлийн сан", color: "indigo" as const },
-    { value: "0₮", label: "өгөгдөл шилжүүлэлт", color: "violet" as const },
+    { value: "1 өдөр", label: "нэвтрүүлэлтийн хугацаа", color: "blue" as const },
+    { value: "6 модуль", label: "нэг өгөгдлийн сан", color: "purple" as const },
+    { value: "0₮", label: "өгөгдөл шилжүүлэлт", color: "orange" as const },
   ],
 };
 
@@ -97,25 +97,25 @@ export const problems = {
   items: [
     {
       icon: "grid" as const,
-      color: "teal" as const,
+      color: "blue" as const,
       title: "Хичээлийн хуваарь",
       body: "Багш, анги, танхимын мэдээллийг нэг дороос харж, давхардал болон сул цагийг тооцон хуваарь зохион байгуулах боломжтой.",
     },
     {
       icon: "coin" as const,
-      color: "indigo" as const,
+      color: "purple" as const,
       title: "Төлбөрийн хяналт",
       body: "Төлбөр тооцооны бүртгэл, хяналтыг хөнгөвчилж, төлөлт, үлдэгдэл, хоцролтыг тань бүрэн хариуцна.",
     },
     {
       icon: "bars" as const,
-      color: "violet" as const,
+      color: "orange" as const,
       title: "Удирдлагын оролцоо",
       body: "Салбар, багш, анги, сурагч, ирц, төлбөр зэрэг байгууллагын үйл ажиллагаанд шаардлагатай мэдээллийг нэг платформоос харж, олон систем, файл, сувгаар мэдээлэл хайх шаардлагагүй болж, байгууллагынхаа үйл ажиллагааг нэг дороос удирдана.",
     },
     {
       icon: "chat" as const,
-      color: "amber" as const,
+      color: "blue" as const,
       title: "Эцэг эхийн оролцоо",
       body: "Эцэг эхэд хэрэгтэй хуваарь, ирц, төлбөр, даалгавар, дүн, сургалтын явцын бусад мэдээллийг нэг дороос харж, хүүхдийнхээ сургалтын үйл явцын мэдээллээр бүрэн хангагдана.",
     },
@@ -132,9 +132,9 @@ export const managementFeature = {
     "Дүүрсэн анги, давхардсан хуваарь, төлбөрийн мэдээллийг гараар шалгаж, тооцоолох шаардлагагүй",
   ],
   kpis: [
-    { value: "₮18.4сая", label: "Сарын орлого", color: "teal" as const },
-    { value: "486", label: "Идэвхтэй сурагч", color: "indigo" as const },
-    { value: "₮6.8сая", label: "Авлага", color: "amber" as const },
+    { value: "₮18.4сая", label: "Сарын орлого", color: "blue" as const },
+    { value: "486", label: "Идэвхтэй сурагч", color: "purple" as const },
+    { value: "₮6.8сая", label: "Авлага", color: "orange" as const },
   ],
   bars: [38, 58, 44, 80, 64, 94],
 };
@@ -149,11 +149,11 @@ export const financeFeature = {
     "Хувааж төлөх, хөнгөлөлт тооцох боломжтой",
   ],
   rows: [
-    { dot: "teal" as const, name: "Б. Номин", meta: "Англи A1", note: "Төлсөн" },
-    { dot: "teal" as const, name: "Д. Тэмүүлэн", meta: "ЭЕШ", note: "Төлсөн" },
-    { dot: "amber" as const, name: "С. Анужин", meta: "Матем 9", note: "08/30" },
-    { dot: "rose" as const, name: "Г. Бат-Эрдэнэ", meta: "IELTS", note: "12 хоног хэтэрсэн" },
-    { dot: "violet" as const, name: "Х. Сувд", meta: "Робо", note: "Хувааж төлж буй" },
+    { dot: "blue" as const, name: "Б. Номин", meta: "Англи A1", note: "Төлсөн" },
+    { dot: "blue" as const, name: "Д. Тэмүүлэн", meta: "ЭЕШ", note: "Төлсөн" },
+    { dot: "orange" as const, name: "С. Анужин", meta: "Матем 9", note: "08/30" },
+    { dot: "danger" as const, name: "Г. Бат-Эрдэнэ", meta: "IELTS", note: "12 хоног хэтэрсэн" },
+    { dot: "purple" as const, name: "Х. Сувд", meta: "Робо", note: "Хувааж төлж буй" },
   ],
 };
 
@@ -167,11 +167,11 @@ export const parentFeature = {
     "Сарын явцын тайлан, даалгаврын биелэлт",
   ],
   rows: [
-    { dot: "teal" as const, label: "Хүүхэд ирлээ", note: "14:02" },
-    { dot: "amber" as const, label: "Дараагийн төлбөр", note: "08/30" },
-    { dot: "violet" as const, label: "Математик — даалгавар илгээгдсэн", note: "Өчигдөр" },
-    { dot: "teal" as const, label: "Сарын явцын тайлан бэлэн", note: "Шинэ" },
-    { dot: "indigo" as const, label: "Ирцийн дундаж", note: "92%" },
+    { dot: "blue" as const, label: "Хүүхэд ирлээ", note: "14:02" },
+    { dot: "orange" as const, label: "Дараагийн төлбөр", note: "08/30" },
+    { dot: "purple" as const, label: "Математик — даалгавар илгээгдсэн", note: "Өчигдөр" },
+    { dot: "blue" as const, label: "Сарын явцын тайлан бэлэн", note: "Шинэ" },
+    { dot: "purple" as const, label: "Ирцийн дундаж", note: "92%" },
   ],
 };
 
@@ -246,11 +246,11 @@ export const userTypes = {
   title: "Таван төрлийн хэрэглэгч, *таван өөр мэдээлэл*",
   lede: "Хүн бүр өөрт хэрэгтэй мэдээллийг л харуулна. Захирал тайлангаа, менежер хуваарь ба бүртгэлээ, багш сурагчдынхаа мэдээллийг, эцэг эх хүүхдийнхээ явцыг, сурагч өөрийн хичээл материалаа л харна.",
   people: [
-    { initial: "З", bg: "teal" as const, ink: "dark" as const, name: "Захирал", note: "Тайлан, санхүү, салбар" },
-    { initial: "М", bg: "indigo" as const, ink: "light" as const, name: "Менежер", note: "Хуваарь, бүртгэл, авлага" },
-    { initial: "Б", bg: "violet" as const, ink: "light" as const, name: "Багш", note: "Ирц, даалгавар, дүн" },
-    { initial: "Э", bg: "amber" as const, ink: "dark" as const, name: "Эцэг эх", note: "Ирц, төлбөр, явц" },
-    { initial: "С", bg: "rose" as const, ink: "dark" as const, name: "Сурагч", note: "Материал, даалгавар, оноо" },
+    { initial: "З", bg: "blue" as const, name: "Захирал", note: "Тайлан, санхүү, салбар" },
+    { initial: "М", bg: "purple" as const, name: "Менежер", note: "Хуваарь, бүртгэл, авлага" },
+    { initial: "Б", bg: "orange" as const, name: "Багш", note: "Ирц, даалгавар, дүн" },
+    { initial: "Э", bg: "blue" as const, name: "Эцэг эх", note: "Ирц, төлбөр, явц" },
+    { initial: "С", bg: "purple" as const, name: "Сурагч", note: "Материал, даалгавар, оноо" },
   ],
 };
 
@@ -277,7 +277,7 @@ export interface PricingPlan {
   ctaVariant: "pri" | "sec";
   best?: boolean;
   flag?: string;
-  color: "teal" | "indigo" | "violet" | "amber";
+  color: "blue" | "purple" | "orange";
 }
 
 export const pricing = {
@@ -295,7 +295,7 @@ export const pricing = {
       branches: "1",
       cta: "Эхлэх",
       ctaVariant: "sec",
-      color: "teal",
+      color: "blue",
     },
     {
       name: "Standard",
@@ -306,7 +306,7 @@ export const pricing = {
       branches: "2",
       cta: "Эхлэх",
       ctaVariant: "sec",
-      color: "indigo",
+      color: "purple",
     },
     {
       name: "Professional",
@@ -319,7 +319,7 @@ export const pricing = {
       ctaVariant: "pri",
       best: true,
       flag: "Түгээмэл",
-      color: "violet",
+      color: "orange",
     },
     {
       name: "Unlimited",
@@ -330,7 +330,7 @@ export const pricing = {
       branches: "Хязгааргүй",
       cta: "Ярилцах",
       ctaVariant: "sec",
-      color: "amber",
+      color: "blue",
     },
   ] satisfies PricingPlan[],
 };

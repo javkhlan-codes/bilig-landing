@@ -8,7 +8,7 @@ export function Footer() {
         <span>
           {footer.links.map((link, i) => (
             <span key={link.href}>
-              <a href={link.href} className="text-txt-2 no-underline hover:text-teal">
+              <a href={link.href} className="text-txt-2 no-underline hover:text-blue">
                 {link.label}
               </a>
               {i < footer.links.length - 1 ? " · " : ""}

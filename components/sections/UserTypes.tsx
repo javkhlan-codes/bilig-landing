@@ -19,9 +19,7 @@ export function UserTypes() {
             <div className="flex flex-wrap gap-[13px]">
               {userTypes.people.map((person) => (
                 <div key={person.name} className="c-av">
-                  <i className={`c-av__i ${bgColor[person.bg]} ${person.ink === "light" ? "!text-white" : ""}`}>
-                    {person.initial}
-                  </i>
+                  <i className={`c-av__i ${bgColor[person.bg]}`}>{person.initial}</i>
                   <span className="text-[14.5px] font-medium">
                     {person.name}
                     <small className="block text-xs font-normal text-txt-2">{person.note}</small>

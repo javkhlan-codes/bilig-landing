@@ -21,7 +21,7 @@ export function ScheduleCard() {
         <span className="font-mono-brand text-[11.5px] uppercase tracking-[.1em] text-txt-2">
           {scheduleCard.title}
         </span>
-        <span className="ml-auto rounded-full bg-pill px-[11px] py-1 font-mono-brand text-[11px] text-teal">
+        <span className="ml-auto rounded-full bg-pill px-[11px] py-1 font-mono-brand text-[11px] text-blue">
           {scheduleCard.pill}
         </span>
       </div>

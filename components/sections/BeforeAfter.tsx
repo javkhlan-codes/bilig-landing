@@ -15,7 +15,7 @@ export function BeforeAfter() {
             {beforeAfter.rows.map((row) => (
               <div key={row.before} className="c-ba__r">
                 <span className="c-ba__o">{row.before}</span>
-                <span className="text-center font-mono-brand text-[13px] text-teal">→</span>
+                <span className="text-center font-mono-brand text-[13px] text-blue">→</span>
                 <span className="text-[16px] font-semibold">{row.after}</span>
               </div>
             ))}

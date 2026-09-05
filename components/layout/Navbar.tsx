@@ -2,14 +2,14 @@ import Link from "next/link";
 import { nav } from "@/data/content";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { BiligLogo } from "@/components/ui/BiligLogo";
 
 export function Navbar() {
   return (
     <nav className="c-nav">
       <div className="wrap flex h-17.5 items-center gap-7">
-        <Link href="#top" className="font-display c-brand text-lg font-bold tracking-[-0.01em] no-underline">
-          {nav.brand}
-          <span>.</span>
+        <Link href="#top" aria-label={nav.brand}>
+          <BiligLogo className="h-7 w-auto text-txt" />
         </Link>
 
         <div className="ml-auto hidden gap-6.5 text-[15px] min-[900px]:flex">

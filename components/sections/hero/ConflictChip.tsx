@@ -9,7 +9,7 @@ export function ConflictChip() {
         {conflict.title}
       </div>
       <div className="mt-[3px] text-[12.5px] leading-[1.45] text-txt-2">{conflict.body}</div>
-      <span className="mt-2 inline-block font-mono-brand text-[11px] font-medium text-teal">{conflict.action}</span>
+      <span className="mt-2 inline-block font-mono-brand text-[11px] font-medium text-blue">{conflict.action}</span>
     </div>
   );
 }
