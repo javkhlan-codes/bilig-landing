@@ -6,13 +6,13 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 export function Navbar() {
   return (
     <nav className="c-nav">
-      <div className="wrap flex h-[70px] items-center gap-7">
+      <div className="wrap flex h-17.5 items-center gap-7">
         <Link href="#top" className="font-display c-brand text-lg font-bold tracking-[-0.01em] no-underline">
           {nav.brand}
           <span>.</span>
         </Link>
 
-        <div className="ml-auto hidden gap-[26px] text-[15px] min-[900px]:flex">
+        <div className="ml-auto hidden gap-6.5 text-[15px] min-[900px]:flex">
           {nav.links.map((link) => (
             <a key={link.href} href={link.href} className="c-nav-link">
               {link.label}
@@ -20,10 +20,10 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-[10px] min-[900px]:ml-[22px]">
+        <div className="ml-auto flex items-center gap-2.5 min-[900px]:ml-5.5">
           <ThemeToggle />
           <Button href="#ehleh" variant="sec" size="sm" className="hidden min-[560px]:inline-flex">
-            Демо цаг авах
+            Демо үзэх
           </Button>
           <Button href="#ehleh" variant="pri" size="sm">
             Үнэгүй турших

@@ -21,20 +21,19 @@ export function Hero() {
             <br />
             <em className="c-em">{hero.titleLines[1]}</em>
           </h1>
-          <p className="mt-[22px] max-w-[45ch] text-[clamp(16.5px,1.5vw,19px)] font-light text-txt-2">
+          <p className="mt-5.5 max-w-[45ch] text-[clamp(16.5px,1.5vw,19px)] font-light text-txt-2">
             {hero.sub}
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 mt-4">
             <Button href="#ehleh" variant="pri">
-              14 хоног үнэгүй турших
+              Үнэгүй турших
             </Button>
             <Button href="#ehleh" variant="sec">
-              Демо цаг авах
+              Демо үзэх
             </Button>
           </div>
-          <p className="mt-5 font-mono-brand text-[12.5px] text-txt-3">{hero.note}</p>
 
-          <div className="mt-9 flex flex-wrap gap-[34px] border-t border-line pt-[26px]">
+          <div className="mt-9 flex flex-wrap gap-8.5 border-t border-line pt-6.5">
             {hero.stats.map((stat) => (
               <div key={stat.label}>
                 <b className={`font-display block text-[25px] font-bold tracking-[-0.04em] ${textColor[stat.color]}`}>

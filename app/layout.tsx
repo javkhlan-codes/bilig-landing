@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Unbounded, Onest, JetBrains_Mono } from "next/font/google";
+import { Golos_Text, Onest, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-// Mongolian copy needs the cyrillic subset alongside latin for every brand
-// typeface; next/font subsets + self-hosts them at build time (no runtime
-// request to fonts.googleapis.com).
-const unbounded = Unbounded({
+// Unbounded (the previous display face) draws lowercase "ө" at a fraction
+// of the correct x-height in Cyrillic — a real glyph-design bug, easy to
+// miss in Latin-only testing but glaring in Mongolian, where "ө" is one of
+// the most common letters. Golos Text is built with the Cyrillic script as
+// a first-class citizen (not a bolted-on subset) and has no such issue —
+// verified directly against Onest/JetBrains Mono, which were already fine.
+const golosText = Golos_Text({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-unbounded",
+  variable: "--font-golos",
   display: "swap",
 });
 const onest = Onest({
@@ -33,9 +36,6 @@ export const metadata: Metadata = {
     "Хуваарь, ирц, төлбөр, эцэг эхийн харилцаа — сургалтын төвийн бүх ажил нэг системд. 14 хоног үнэгүй.",
 };
 
-/** Runs before hydration to stamp `data-theme` on `<html>` synchronously,
- * avoiding a flash of the wrong theme. Defaults to dark (the brand's
- * primary theme), same as the original static page. */
 const themeInitScript = `(function(){try{var t=localStorage.getItem('bilig-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -43,11 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html
       lang="mn"
       data-theme="dark"
-      className={`${unbounded.variable} ${onest.variable} ${jetbrainsMono.variable}`}
-      // `themeInitScript` below overwrites `data-theme` before hydration
-      // (from localStorage) so it can differ from this server-rendered
-      // default on purpose — that's the whole point of the script, not a
-      // bug, so React shouldn't warn about it.
+      className={`${golosText.variable} ${onest.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

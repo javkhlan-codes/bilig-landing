@@ -1,5 +1,4 @@
 import { Hero } from "@/components/sections/Hero";
-import { LogoStrip } from "@/components/sections/LogoStrip";
 import { Problems } from "@/components/sections/Problems";
 import { Features } from "@/components/sections/Features";
 import { DayFlow } from "@/components/sections/DayFlow";
@@ -15,7 +14,6 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <LogoStrip />
       <Problems />
       <Features />
       <DayFlow />

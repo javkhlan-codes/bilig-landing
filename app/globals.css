@@ -85,7 +85,7 @@
   /* names come from next/font (see app/layout.tsx); system-ui/sans-serif
      fallbacks cover the (practically impossible) case a font fails to load
      before next/font's own metric-matched fallback kicks in */
-  --font-display: var(--font-unbounded, "Unbounded"), system-ui, sans-serif;
+  --font-display: var(--font-golos, "Golos Text"), system-ui, sans-serif;
   --font-body: var(--font-onest, "Onest"), system-ui, sans-serif;
   --font-mono-brand: var(--font-jbmono, "JetBrains Mono"), ui-monospace, monospace;
 }
