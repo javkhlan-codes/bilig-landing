@@ -1,0 +1,101 @@
+# Build → publish → roll out, on every push to main.
+#
+# The droplet has 2 vCPU and never builds anything: CI produces the image,
+# pushes it to GHCR, and the deploy step only asks the server to pull a tag.
+# Images are tagged with the commit SHA, so what runs in production is always
+# traceable to a commit and a rollback is a re-run of an older deploy.
+name: Deploy bilig.systems
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One rollout at a time, and never cancel one halfway through.
+concurrency:
+  group: deploy-landing
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/erdene-vvl/bilig-landing
+  SERVICE: landing
+  DEPLOY_HOST: 165.22.96.166
+  DEPLOY_USER: deploy
+
+jobs:
+  verify:
+    name: Lint and types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  build:
+    name: Build and push image
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.tag.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: tag
+        run: echo "image=${IMAGE}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      # The job's own short-lived token — the repos and the GHCR namespace
+      # share one owner, so no long-lived PAT belongs in this repo.
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.tag.outputs.image }}
+            ${{ env.IMAGE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+  deploy:
+    name: Roll out to bilig.systems
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          IMAGE_REF: ${{ needs.build.outputs.image }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Pinned, not scanned — the runner is a fresh host every time and
+          # trust-on-first-use would accept whatever answers on port 22.
+          printf '%s\n' "165.22.96.166 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/k16aUbmSY2lniUtE/vZJ8GtnB355ppCc9LlzRcYtb" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" \
+            "/opt/bilig/deploy.sh $SERVICE '$IMAGE_REF'"
+
+      - name: Smoke test
+        run: |
+          for url in https://bilig.systems/ https://www.bilig.systems/; do
+            code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url")"
+            echo "$url -> $code"
+            # Any 2xx/3xx/4xx means Next answered; 5xx or 000 means it did not.
+            case "$code" in 2*|3*|4*) ;; *) exit 1 ;; esac
+          done

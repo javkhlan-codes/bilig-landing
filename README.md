@@ -62,3 +62,38 @@ automatically. Bespoke, brand-specific chrome that doesn't fit Tailwind's
 utility model (decorative arcs, the gradient promo band, the schedule grid,
 staggered cards, the FAQ accordion marker, scroll-reveal) lives in
 `app/globals.css` under `@layer components` as `.c-*` classes.
+
+## Deployment
+
+Live at **https://bilig.systems** and **https://www.bilig.systems** — both
+names serve this site directly; neither redirects to the other.
+
+Push to `main` is the whole deploy story. `.github/workflows/deploy.yml`:
+
+1. **verify** — `npm ci`, `npm run lint`, `npm run typecheck`.
+2. **build** — builds `Dockerfile` and pushes
+   `ghcr.io/erdene-vvl/bilig-landing:<commit-sha>` (plus `:latest`) to GHCR.
+   The droplet has 2 vCPU and never builds the image itself.
+3. **deploy** — SSHes to the droplet as `deploy` and runs
+   `/opt/bilig/deploy.sh landing <image>`, which pins the tag in
+   `/opt/bilig/app/.env`, pulls, restarts the container, waits for its
+   healthcheck, and **rolls back to the previous image** if it never turns
+   healthy. A smoke test then checks both public URLs.
+
+Because the tag is the commit SHA, a rollback is just re-running an older
+deploy, and a reboot brings back exactly the image CI last verified.
+
+### Server layout
+
+The site runs as the `landing` service of the shared `bilig` compose project
+at `/opt/bilig/app/docker-compose.prod.yml`, listening on `127.0.0.1:3103`
+alongside `student` (3100), `tenant` (3101) and `admin` (3102). nginx
+(`/etc/nginx/sites-available/bilig.systems.conf`) terminates TLS for both
+hostnames with a Let's Encrypt certificate (`bilig-landing`) and proxies to
+3103; plain HTTP 301s to HTTPS.
+
+The image needs no configuration — the site is entirely static content
+compiled into the bundle, with no backend calls and no secrets.
+
+Repo secret: `DEPLOY_SSH_KEY`, the private half of a deploy-only SSH key
+authorized for the `deploy` user on the droplet.
